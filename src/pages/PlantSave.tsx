@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Image,
@@ -14,6 +14,16 @@ import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { format, isBefore } from 'date-fns';
+import { SharedElement } from 'react-navigation-shared-element';
+import Animated, {
+    Easing,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+    interpolate,
+    Extrapolate,
+    withSequence
+} from 'react-native-reanimated';
 
 import { Button } from '../components/Button';
 import { PlantProps, savePlant } from '../libs/storage';
@@ -34,6 +44,36 @@ export function PlantSave({ route, navigation }: PlantSaveProps) {
   const [showDatePicker, setShowDatePicker] = useState(Platform.OS == 'ios');
 
   const { plant } = route.params as Params;
+
+  const titlePosition = useSharedValue(-200);
+
+    const buttonPosition = useSharedValue(100)
+    const buttonStyle = useAnimatedStyle(() => {
+      return {
+        transform: [
+          { translateY: buttonPosition.value }
+        ],
+        opacity: interpolate(
+          buttonPosition.value,
+          [100, 0], // numero minimo e maxi da animacao
+          [0, 1], // opacidade respectiva na posicao
+        Extrapolate.CLAMP // limita a opacidade de 0 ate 1
+        )
+      }
+    });
+
+    const titleStyle = useAnimatedStyle(() => {
+      return {
+        transform: [
+          { translateX: titlePosition.value },
+        ],
+        opacity: interpolate(
+          titlePosition.value,
+          [-200, 0],
+          [0, 1]
+        )
+      }
+    });
 
   function handleChangeTime(event: DateTimePickerEvent, dateTime: Date | undefined) {
     if(Platform.OS == 'android') {
@@ -72,22 +112,40 @@ export function PlantSave({ route, navigation }: PlantSaveProps) {
     }
   }
 
+  useEffect(() => {
+    buttonPosition.value =
+      withTiming(0, {
+        duration: 700,
+        //para gerar cubic-bezier https://cubic-bezier.com/#.15,.75,.93,.54
+        easing: Easing.bounce
+      });
+
+    titlePosition.value =
+      withTiming(0, {
+        duration: 700,
+        //para gerar cubic-bezier https://cubic-bezier.com/#.15,.75,.93,.54
+        easing: Easing.bounce
+      });
+},[]);
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.container}
+      contentContainerStyle={styles.scrollListContainer}
     >
       <View style={styles.container}>
         <View style={styles.plantInfo}>
-          <SvgFromUri
-            uri={plant.photo}
-            height={150}
-            width={150}
-          />
+          <SharedElement id={`item.${plant.id}.image`}>
+            <SvgFromUri
+              uri={plant.photo}
+              height={150}
+              width={150}
+            />
+          </SharedElement>
 
-          <Text style={styles.plantName}>
+          <Animated.Text style={[styles.plantName, titleStyle]}>
             { plant.name }
-          </Text>
+          </Animated.Text>
 
           <Text style={styles.plantAbout}>
             { plant.about }
@@ -132,10 +190,12 @@ export function PlantSave({ route, navigation }: PlantSaveProps) {
             )
           }
 
-          <Button
-            title="Cadastrar planta"
-            onPress={handleSave}
-          />
+          <Animated.View style={buttonStyle}>
+            <Button
+              title="Cadastrar planta"
+              onPress={handleSave}
+            />
+          </Animated.View>
         </View>
       </View>
     </ScrollView>
@@ -143,6 +203,11 @@ export function PlantSave({ route, navigation }: PlantSaveProps) {
 }
 
 const styles = StyleSheet.create({
+  scrollListContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    backgroundColor: colors.shape
+  },
   container: {
     flex: 1,
     justifyContent: 'space-between',

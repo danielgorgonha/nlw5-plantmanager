@@ -1,5 +1,7 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { enableScreens } from 'react-native-screens';
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 
 import colors from '../../styles/colors';
 
@@ -7,16 +9,18 @@ import { Welcome } from '../pages/Welcome';
 import { UserIdentification } from '../pages/UserIdentification';
 import { Confirmation } from '../pages/Confirmation';
 import { PlantSave } from '../pages/PlantSave';
-import { MyPlants } from '../pages/MyPlants';
 import AuthRoutes from './tab.routes';
 
-const stackRoutes = createNativeStackNavigator();
+enableScreens();
+
+const stackRoutes = createSharedElementStackNavigator();
+// const stackRoutes = createNativeStackNavigator();
 
 const AppRoutes: React.FC = () => (
   <stackRoutes.Navigator
     screenOptions={{
       headerShown: false,
-      contentStyle: {
+      cardStyle: {
         backgroundColor: colors.white
       }
     }}
@@ -44,6 +48,17 @@ const AppRoutes: React.FC = () => (
     <stackRoutes.Screen
       name="PlantSave"
       component={PlantSave}
+      sharedElementsConfig = {(route) => {
+        const { plant } = route.params
+        return [
+          {
+            id: `item.${plant.id}.image`,
+            animation: 'move',
+            resize: 'clip',
+            align: 'center-top'
+          },
+        ]
+      }}
     />
 
     <stackRoutes.Screen
