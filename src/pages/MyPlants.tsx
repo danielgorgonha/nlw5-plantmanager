@@ -28,22 +28,21 @@ export function MyPlants() {
 
   const scrollY = useSharedValue(0);
 
+  const scrollHandler = useAnimatedScrollHandler(event => {
+    scrollY.value = event.contentOffset.y;
+    //console.log(event.contentOffset.y)
+  });
 
-    const scrollHandler = useAnimatedScrollHandler(event => {
-        scrollY.value = event.contentOffset.y;
-        console.log(event.contentOffset.y)
-    });
-
-    const headerStyle = useAnimatedStyle(() => {
-      return {
-        height: interpolate(
-            scrollY.value,
-            [0, 130],
-            [200, 130],
-            Extrapolate.CLAMP
-        )
-      }
-    });
+  const headerStyle = useAnimatedStyle(() => {
+    return {
+      height: interpolate(
+        scrollY.value,
+        [0, 130],
+        [200, 130],
+        Extrapolate.CLAMP
+      )
+    }
+  });
 
 
   function handleRemove(plant: PlantProps) {
@@ -99,7 +98,7 @@ export function MyPlants() {
       <Animated.ScrollView
         style={{ width: '100%'}}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: 200 }}
+        contentContainerStyle={{ flexGrow: 1, paddingTop: 200 }}
         onScroll={scrollHandler}
         scrollEventThrottle={16} // 1000 / 60 = 16. (1 segundo / 60 que é a quantidade de frames por segundo para ter uma animação de 60 frames)
       >
@@ -128,7 +127,9 @@ export function MyPlants() {
                 handleRemove={() => {handleRemove(item)}}
               />
             )}
+            horizontal={false}
             showsVerticalScrollIndicator={false}
+            ListHeaderComponent={null}
           />
         </View>
       </Animated.ScrollView>

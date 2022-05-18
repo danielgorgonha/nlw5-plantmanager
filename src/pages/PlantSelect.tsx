@@ -147,7 +147,6 @@ export function PlantSelect({ navigation }: PlantSelectProps ) {
           )}
           showsVerticalScrollIndicator={false}
           numColumns={2}
-          contentContainerStyle={styles.plantList}
           onEndReachedThreshold={0.1}
           onEndReached={({distanceFromEnd}) => handleFetchMore(distanceFromEnd)}
           ListFooterComponent={
@@ -193,6 +192,7 @@ const styles = StyleSheet.create({
   },
   plants: {
     flex: 1,
+    paddingHorizontal: 32,
+    justifyContent: 'center'
   },
-  plantList: {}
 })

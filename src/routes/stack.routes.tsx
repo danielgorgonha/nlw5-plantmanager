@@ -48,7 +48,7 @@ const AppRoutes: React.FC = () => (
     <stackRoutes.Screen
       name="PlantSave"
       component={PlantSave}
-      sharedElementsConfig = {(route) => {
+      sharedElements={(route) => {
         const { plant } = route.params
         return [
           {
