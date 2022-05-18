@@ -13,6 +13,30 @@
 ![cover](capa.png?style=flat)
 <br><br>
 
+<h1 align="center">👥 User Stories</h1>
+<p align="center">
+O João ganhou um vaso de flor e não sabe qual é o melhor lugar da casa para colocar/decorar.
+João se questinou: será que essa platinha prefere ambiente externo? Sombra? Qual será a frequência ideal para regá-la?
+</p>
+<p align="center">
+Além do mais, essa pessoa tem uma rotina bem agitada, então que tal ajudá-la a lembrar de regar a plantinha na frequência correta?
+Ou seja, o App ajuda o João a cuidar com carinho das platinhas que ele tem na sua casa. :heart:
+</p>
+
+<br><br>
+
+<h1 align="center">Features</h1>
+<p align="center">
+Abaixo estão os passo a passo utilizado durante o desenvolvimento do app.
+</p>
+
+-   [ ] Salva a identificação do usuário no próprio dispositivo o usuário;
+-   [ ] Consome de API os dados e características de cada planta;
+-   [ ] Salva localmente a planta que o usuário possue;
+-   [ ] Lembra o usuário quando regar e cuidar da plantinha de acordo com a frequência ideial das plantas que o usuário possui;
+
+<br><br>
+
 <h1 align="center">:pushpin: Algumas das tecnologias utilizadas</h1>
 <p align="center">
   Abaixo estão algumas das tecnologias utilizadas durante o desenvolvimento do app.
